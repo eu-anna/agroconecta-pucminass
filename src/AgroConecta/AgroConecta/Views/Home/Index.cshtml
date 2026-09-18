@@ -1,0 +1,155 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+<h1 class="page-title mb-5">Dashboard</h1>
+
+<div class="agro-card p-5" style="overflow: hidden;">
+
+    <div class="row mb-3">
+        <div class="col-md-4 mb-2">
+            <div class="card border-0 shadow-sm bg-success text-white h-100">
+                <div class="card-body d-flex align-items-center justify-content-between py-3">
+                    <div>
+                        <h6 class="text-uppercase opacity-75 small">Total de Culturas</h6>
+                        <h2 class="h3 font-weight-bold mb-0" id="card-total-culturas">...</h2>
+                    </div>
+                    <i class="fa-solid fa-seedling fa-2x opacity-50"></i>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-2">
+            <div class="card border-0 shadow-sm bg-info text-white h-100">
+                <div class="card-body d-flex align-items-center justify-content-between py-3">
+                    <div>
+                        <h6 class="text-uppercase opacity-75 " style="font-size: 0.85rem;">Último Diagnóstico</h6>
+                        <h2 class="h4 font-weight-bold mb-0 mt-1" id="card-ultimo-diagnostico">...</h2>
+                    </div>
+                    <i class="fa-solid fa-microscope fa-2x opacity-50"></i>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-2">
+            <div class="card border-0 shadow-sm bg-warning text-white h-100">
+                <div class="card-body d-flex align-items-center justify-content-between py-3">
+                    <div>
+                        <h6 class="text-uppercase opacity-75 small">Total de Atividades</h6>
+                        <h2 class="h3 font-weight-bold mb-0" id="card-total-atividades">...</h2>
+                    </div>
+                    <i class="fa-solid fa-list-check fa-2x opacity-50"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6 mb-2">
+            <div class="card border-0 h-100 bg-light">
+                <div class="card-header bg-transparent border-0 pt-2 pb-0">
+                    <h6 class="card-title text-muted font-weight-bold mb-0">Culturas por Análise</h6>
+                </div>
+                <div class="card-body d-flex justify-content-center align-items-center py-2" style="position: relative; height:240px;">
+                    <canvas id="chartCulturas"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 mb-2">
+            <div class="card border-0 h-100 bg-light">
+                <div class="card-header bg-transparent border-0 pt-2 pb-0">
+                    <h6 class="card-title text-muted font-weight-bold mb-0">Status das Atividades</h6>
+                </div>
+                <div class="card-body d-flex justify-content-center align-items-center py-2" style="position: relative; height:240px;">
+                    <canvas id="chartAtividades"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    function carregarDashboard() {
+    const urlData = "/AnalisesCulturas/GetDashboardData";
+
+    console.log("Buscando dados em: " + urlData);
+
+    fetch(urlData)
+    .then(response => {
+    if (!response.ok) {
+    throw new Error("Erro HTTP: " + response.status);
+    }
+    return response.json();
+    })
+    .then(data => {
+    console.log("Dados recebidos com sucesso:", data);
+
+    // 1. Alimenta os Cards
+    document.getElementById("card-total-culturas").innerText = data.cards.totalCulturas;
+    document.getElementById("card-ultimo-diagnostico").innerText = data.cards.ultimoDiagnostico;
+    document.getElementById("card-total-atividades").innerText = data.cards.totalAtividades;
+
+    // 2. Gráfico de Culturas
+    const labelsCulturas = data.graficoCulturas.map(c => c.item);
+    const valoresCulturas = data.graficoCulturas.map(c => c.quantidade);
+
+    new Chart(document.getElementById("chartCulturas"), {
+    type: 'pie',
+    data: {
+    labels: labelsCulturas,
+    datasets: [{
+    data: valoresCulturas,
+    backgroundColor: ['#2e7d32', '#4caf50', '#81c784', '#a5d6a7', '#c8e6c9']
+    }]
+    },
+    options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+    legend: {
+    position: 'bottom', // Move as legendas para baixo poupando espaço nas laterais
+    labels: { boxWidth: 12, font: { size: 11 } }
+    }
+    }
+    }
+    });
+
+    // 3. Gráfico de Atividades
+    const labelsAtividades = data.graficoAtividades.map(a => a.item);
+    const valoresAtividades = data.graficoAtividades.map(a => a.quantidade);
+
+    new Chart(document.getElementById("chartAtividades"), {
+    type: 'doughnut',
+    data: {
+    labels: labelsAtividades,
+    datasets: [{
+    data: valoresAtividades,
+    backgroundColor: ['#0288d1', '#fbc02d', '#ef5350', '#78909c']
+    }]
+    },
+    options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+    legend: {
+    position: 'bottom', // Move as legendas para baixo poupando espaço nas laterais
+    labels: { boxWidth: 12, font: { size: 11 } }
+    }
+    }
+    }
+    });
+    })
+    .catch(error => {
+    console.error("Erro ao alimentar o dashboard:", error);
+    });
+    }
+
+    if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", carregarDashboard);
+    } else {
+    carregarDashboard();
+    }
+</script>

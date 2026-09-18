@@ -1,0 +1,53 @@
+@model AgroConecta.Models.Propriedade
+
+@{
+    ViewData["Title"] = "Editar Propriedade";
+}
+
+<h1 class="page-title">Editar Propriedade</h1>
+
+<div class="agro-card form-card">
+
+    <form asp-action="Edit" method="post">
+
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+        <input type="hidden" asp-for="Id" />
+
+        <input asp-for="Nome"
+               class="agro-input"
+               placeholder="Nome" />
+
+        <input asp-for="Area"
+               type="number"
+               step="0.01"
+               min="0"
+               class="agro-input"
+               placeholder="Área em hectares" />
+
+        <input asp-for="LocalizacaoGeo"
+               class="agro-input"
+               placeholder="Localização" />
+
+        <input asp-for="Cib"
+               class="agro-input"
+               placeholder="CIB" />
+
+        <input asp-for="CriadoPor"
+               type="hidden" />
+
+        <button type="submit" class="agro-btn">
+            Salvar alterações
+        </button>
+
+        <a asp-action="Index" class="agro-link">
+            Voltar para lista
+        </a>
+
+    </form>
+
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

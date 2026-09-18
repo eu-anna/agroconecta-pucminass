@@ -1,0 +1,45 @@
+﻿@model AgroConecta.Models.Cultura
+@{
+    ViewData["Title"] = "Detalhes da Cultura";
+}
+<div class="form-page">
+    <h2>Detalhes da Cultura</h2>
+    <div class="form-card detalhe-card">
+        <p>
+            <strong>Cultura:</strong>
+            @Model.NomeCultura
+        </p>
+        <p>
+            <strong>Propriedade:</strong>
+            @Model.Propriedade?.Nome
+        </p>
+        <p>
+            <strong>Área de Plantio:</strong>
+            @Model.AreaPlantio ha
+        </p>
+        <p>
+            <strong>Data de Plantio:</strong>
+            @Model.DataPlantio?.ToString("dd/MM/yyyy HH:mm")
+        </p>
+        <p>
+            <strong>Colheita Estimada:</strong>
+            @Model.DataPrevistaColheita?.ToString("dd/MM/yyyy HH:mm")
+        </p>
+        <p>
+            <strong>Data de Irrigação:</strong>
+            @Model.DataIrrigacao?.ToString("dd/MM/yyyy HH:mm")
+        </p>
+        <p>
+            <strong>Status:</strong>
+            @Model.Status
+        </p>
+        <div class="form-actions">
+            <a asp-action="Edit" asp-route-id="@Model.Id">
+                Editar
+            </a>
+            <a asp-action="Index">
+                Voltar
+            </a>
+        </div>
+    </div>
+</div>

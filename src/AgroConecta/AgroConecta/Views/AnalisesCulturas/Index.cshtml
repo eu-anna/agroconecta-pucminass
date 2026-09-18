@@ -1,0 +1,114 @@
+﻿@model IEnumerable<AgroConecta.Models.AnaliseCultura>
+
+@{
+    ViewData["Title"] = "Análises da Cultura";
+}
+
+<div class="agro-page">
+    <h2>Análises da Cultura</h2>
+
+    <section class="atividade-card">
+
+        <table class="atividade-table">
+
+            <thead>
+                <tr>
+                    <th>Cultura</th>
+                    <th class="desktop-only">Diagnóstico</th>
+                    <th class="desktop-only">Data</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                @foreach (var analise in Model)
+                {
+                    <tr>
+
+                        <!-- CULTURA -->
+                        <td>
+                            @analise.Cultura?.NomeCultura
+                        </td>
+
+                        <!-- DIAGNÓSTICO PC -->
+                        <td class="desktop-only">
+                            @analise.Diagnostico
+                        </td>
+
+                        <!-- DATA PC -->
+                        <td class="desktop-only">
+                            @analise.CriadoEm.ToString("dd/MM/yyyy HH:mm")
+                        </td>
+
+                        <!-- AÇÕES -->
+                        <td>
+
+                            <!-- BOTÕES NORMAIS PC -->
+                            <div class="desktop-only">
+
+                                <a class="action-link"
+                                       href="/AnalisesCulturas/Resultado/@analise.Id">
+                                    Ver
+                                </a>
+
+                                <a class="action-link danger"
+                                       href="/AnalisesCulturas/Delete/@analise.Id">
+                                    Excluir
+                                </a>
+
+                            </div>
+
+                            <!-- MOBILE -->
+                            <details class="mobile-details">
+
+                                <summary>
+                                    Ver mais ▼
+                                </summary>
+
+                                <p>
+                                    <strong>Diagnóstico:</strong><br />
+                                    @analise.Diagnostico
+                                </p>
+
+                                <p>
+                                    <strong>Data:</strong><br />
+                                    @analise.CriadoEm.ToString("dd/MM/yyyy HH:mm")
+                                </p>
+
+                                <a class="action-link"
+                                       href="/AnalisesCulturas/Resultado/@analise.Id">
+                                    Ver análise
+                                </a>
+
+                                <br />
+
+                                <a class="action-link danger"
+                                       href="/AnalisesCulturas/Delete/@analise.Id">
+                                    Excluir
+                                </a>
+
+                            </details>
+
+                        </td>
+
+                    </tr>
+                }
+
+                <tr>
+                    <td colspan="4">
+                        <a class="nova-linha"
+                               href="/AnalisesCulturas/Create">
+
+                            + Nova análise
+
+                        </a>
+                    </td>
+                </tr>
+
+            </tbody>
+
+        </table>
+
+    </section>
+</div>

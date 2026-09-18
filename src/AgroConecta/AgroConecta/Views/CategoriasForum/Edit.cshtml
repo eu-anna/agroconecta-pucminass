@@ -1,0 +1,39 @@
+﻿@model AgroConecta.Models.CategoriaForum
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<div class="d-flex flex-column vh-100">
+    <header>
+        <h1 class="text-center mt-5 page-title">Editar Categoria</h1>
+    </header>
+
+    <div class="d-flex flex-column justify-content-center align-items-center w-75 m-auto flex-grow-1">
+
+        <div class="w-100 h-75 d-flex flex-column justify-content-center align-items-center card-container">
+            <form class="d-flex flex-column justify-content-center align-items-center gap-4 w-100" asp-action="Edit">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group w-75">
+                    <input asp-for="Nome" class="form-control input" placeholder="Nome" />
+                    <span asp-validation-for="Nome" class="text-danger"></span>
+                </div>
+                <div class="form-group w-75">
+                    <input asp-for="Desc" class="form-control input" placeholder="Descrição" />
+                    <span asp-validation-for="Desc" class="text-danger"></span>
+                </div>
+
+                <div class="form-group d-flex flex-column justify-content-center align-items-center w-100">
+                    <input type="submit" value="Salvar" class="btn-green w-25" />
+                    <a asp-action="Index" class="btn-transparent">Voltar</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

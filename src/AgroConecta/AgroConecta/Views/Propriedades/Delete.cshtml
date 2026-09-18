@@ -1,0 +1,57 @@
+@model AgroConecta.Models.Propriedade
+
+@{
+    ViewData["Title"] = "Excluir Propriedade";
+}
+
+<h1 class="page-title">Excluir Propriedade</h1>
+
+<div class="agro-card form-card">
+
+    <p class="delete-warning">
+        Tem certeza que deseja excluir esta propriedade?
+    </p>
+
+    <div class="details-list">
+
+        <p>
+            <strong>Nome:</strong>
+            <span>@Model.Nome</span>
+        </p>
+
+        <p>
+            <strong>Área:</strong>
+            <span>@Model.Area ha</span>
+        </p>
+
+        <p>
+            <strong>Localização:</strong>
+            <span>@Model.LocalizacaoGeo</span>
+        </p>
+
+        <p>
+            <strong>CIB:</strong>
+            <span>@Model.Cib</span>
+        </p>
+
+    </div>
+
+    <form asp-action="Delete" method="post">
+
+        <input type="hidden" asp-for="Id" />
+
+        <div class="form-actions">
+
+            <button type="submit" class="agro-btn danger-btn">
+                Excluir
+            </button>
+
+            <a asp-action="Index" class="agro-link">
+                Voltar para lista
+            </a>
+
+        </div>
+
+    </form>
+
+</div>

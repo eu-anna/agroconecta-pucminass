@@ -1,0 +1,67 @@
+﻿@model AgroConecta.Models.Cultura
+
+@{
+    ViewData["Title"] = "Editar Cultura";
+}
+
+<div class="form-page">
+
+    <h2>Editar Cultura</h2>
+
+    <form asp-action="Edit" method="post" class="form-card">
+
+        <input asp-for="Id" type="hidden" />
+
+        <select asp-for="PropriedadeId"
+                asp-items="ViewBag.PropriedadeId"
+                class="agro-input">
+        </select>
+
+        <input asp-for="NomeCultura"
+               class="agro-input"
+               placeholder="Nome da cultura" />
+
+        <input asp-for="AreaPlantio"
+               type="number"
+               step="0.01"
+               class="agro-input"
+               placeholder="Área de plantio" />
+
+        <input asp-for="DataPlantio"
+               type="datetime-local"
+               class="agro-input" />
+
+        <input asp-for="DataPrevistaColheita"
+               type="datetime-local"
+               class="agro-input" />
+
+        <input asp-for="DataIrrigacao"
+               type="datetime-local"
+               class="agro-input" />
+
+        <select asp-for="Status"
+                class="agro-input">
+
+            <option value="Plantada">Plantada</option>
+            <option value="Em crescimento">Em crescimento</option>
+            <option value="Pronta para colheita">Pronta para colheita</option>
+            <option value="Colhida">Colhida</option>
+            <option value="Cancelada">Cancelada</option>
+
+        </select>
+
+        <div class="form-actions">
+
+            <button type="submit" class="agro-btn">
+                Salvar
+            </button>
+
+            <a asp-action="Index" class="agro-link">
+                Voltar
+            </a>
+
+        </div>
+
+    </form>
+
+</div>

@@ -1,0 +1,46 @@
+@model AgroConecta.Models.Relatorio
+
+@{
+    ViewData["Title"] = "Cadastrar Relatório";
+}
+
+<h1 class="page-title">Cadastrar Relatório</h1>
+
+<div class="agro-card form-card">
+
+    <form asp-action="Create"
+          method="post"
+          enctype="multipart/form-data">
+
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+        <select asp-for="PropriedadeId"
+                class="agro-input"
+                asp-items="ViewBag.PropriedadeId">
+
+            <option value="">
+                Selecione a propriedade
+            </option>
+
+        </select>
+
+        <input asp-for="TecnicoId"
+               type="hidden"
+               value="1" />
+
+        <textarea asp-for="Conteudo"
+                  class="agro-textarea"
+                  placeholder="Digite o conteúdo do relatório"></textarea>
+
+        <input type="file"
+               name="Imagem"
+               class="agro-input"
+               accept="image/*" />
+
+        <button type="submit" class="agro-btn">
+            Salvar
+        </button>
+
+    </form>
+
+</div>

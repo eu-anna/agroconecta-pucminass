@@ -1,0 +1,64 @@
+@{
+    ViewData["Title"] = "Login";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login - AgroConecta</title>
+
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+</head>
+<body>
+
+    <div class="container d-flex justify-content-center align-items-center vh-100">
+
+        <div class="agro-card form-card" style="max-width: 420px; width: 100%;">
+
+            <h1 class="page-title text-center">AgroConecta</h1>
+            <p class="text-center mb-4">Entre na sua conta</p>
+
+            @if (ViewBag.Erro != null)
+            {
+                <div class="alert alert-danger">
+                    @ViewBag.Erro
+                </div>
+            }
+
+            <form asp-action="Login" method="post">
+
+                <input name="email"
+                       type="email"
+                       class="agro-input"
+                       placeholder="Email"
+                       required />
+
+                <input name="senha"
+                       type="password"
+                       class="agro-input"
+                       placeholder="Senha"
+                       required />
+
+                <button type="submit" class="agro-btn w-100">
+                    Entrar
+                </button>
+
+                <div class="text-center mt-3">
+                    <span>Não tem conta?</span>
+                    <a asp-controller="Account" asp-action="Register">
+                        Cadastre-se
+                    </a>
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</body>
+</html>

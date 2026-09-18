@@ -1,0 +1,50 @@
+﻿@model AgroConecta.Models.Cultura
+
+@{
+    ViewData["Title"] = "Excluir Cultura";
+}
+
+<div class="form-page">
+
+    <h2>Excluir Cultura</h2>
+
+    <form asp-action="Delete" method="post" class="form-card detalhe-card">
+
+        <input asp-for="Id" type="hidden" />
+
+        <div class="alerta-exclusao">
+            Atenção: ao excluir esta cultura, todas as atividades agrícolas e análises relacionadas a ela também serão removidas permanentemente do sistema.
+        </div>
+
+        <p>Tem certeza que deseja excluir esta cultura?</p>
+
+        <p>
+            <strong>Cultura:</strong>
+            @Model.NomeCultura
+        </p>
+
+        <p>
+            <strong>Propriedade:</strong>
+            @Model.Propriedade?.Nome
+        </p>
+
+        <p>
+            <strong>Status:</strong>
+            @Model.Status
+        </p>
+
+        <div class="form-actions">
+
+            <button type="submit" class="danger-button">
+                Excluir
+            </button>
+
+            <a asp-action="Index">
+                Cancelar
+            </a>
+
+        </div>
+
+    </form>
+
+</div>

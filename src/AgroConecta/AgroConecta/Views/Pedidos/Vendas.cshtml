@@ -1,0 +1,95 @@
+@model IEnumerable<AgroConecta.Models.Pedido>
+
+@{
+    ViewData["Title"] = "Vendas";
+}
+
+<div class="container mt-5">
+    <h4 class="text-center fw-semibold mb-4" style="color: #496326;">
+        Minhas Vendas
+    </h4>
+
+    <div class="row shadow-lg p-4 mx-auto rounded-5 bg-white">
+
+        @if (Model.Any())
+        {
+            <table class="table align-middle">
+                <thead>
+                    <tr>
+                        <th>Pedido</th>
+                        <th>Status</th>
+                        <th>Produtos</th>
+                        <th>Total</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @foreach (var pedido in Model)
+                    {
+                        <tr>
+                            <td>#@pedido.Id</td>
+
+                            <td>
+                                @{
+                                    var statusClass = pedido.Status switch
+                                    {
+                                        StatusPedido.Enviado => "bg-primary",
+                                        StatusPedido.Em_rota_de_entrega => "bg-info",
+                                        StatusPedido.Entregue => "bg-success",
+                                        StatusPedido.Cancelado => "bg-danger",
+                                        StatusPedido.Aguardando_pagamento => "bg-warning",
+                                        _ => "bg-secondary"
+                                    };
+                                }
+
+                                <span class="badge @statusClass">
+                                    @pedido.Status.ToString().Replace("_", " ")
+                                </span>
+                            </td>
+
+                            <td>
+                                <ul class="mb-0">
+                                    @foreach (var item in pedido.Itens)
+                                    {
+                                        <li>
+                                            @item.Produto?.Nome
+                                            (Qtd: @item.Quantidade)
+                                        </li>
+                                    }
+                                </ul>
+                            </td>
+
+                            <td>
+                                R$ @pedido.Total.ToString("N2")
+                            </td>
+
+                            <td class="acoes-coluna">
+                                <form asp-action="AlterarStatus" method="post">
+                                    <input type="hidden" name="pedidoId" value="@pedido.Id" />
+
+                                    <select name="novoStatus"
+                                            class="form-select form-select-sm"
+                                            onchange="this.form.submit()">
+
+                                        @foreach (var status in Enum.GetValues(typeof(AgroConecta.Models.StatusPedido)))
+                                        {
+                                            <option value="@status" selected="@(status.Equals(pedido.Status))">
+                                                @status.ToString().Replace("_", " ")
+                                            </option>
+                                        }
+                                    </select>
+                                </form>
+                            </td>
+                        </tr>
+                }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <p class="text-center">Nenhuma venda encontrada.</p>
+        }
+
+    </div>
+</div>

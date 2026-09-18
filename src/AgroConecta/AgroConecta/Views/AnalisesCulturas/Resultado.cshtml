@@ -1,0 +1,64 @@
+﻿@model AgroConecta.Models.AnaliseCultura
+
+@{
+    ViewData["Title"] = "Resultado da Análise";
+}
+
+<div class="resultado-page">
+
+    <h2>Análise da Cultura</h2>
+
+    @if (!string.IsNullOrEmpty(Model.Imagem))
+    {
+        <img src="@Model.Imagem"
+             class="resultado-img"
+             alt="Imagem analisada" />
+    }
+
+    <section class="report-section">
+
+        <h3>Relatório da Análise ✣</h3>
+
+        <div class="report-box">
+
+            <p>
+                <strong>Cultura:</strong> @Model.Cultura?.NomeCultura
+            </p>
+
+            <p>
+                <strong>Diagnóstico:</strong>
+                @Model.Diagnostico
+            </p>
+
+            <p>
+                <strong>Recomendações:</strong>
+                @Model.Recomendacoes
+            </p>
+
+            <p>
+                <strong>Data:</strong>
+                @Model.CriadoEm.ToString("dd/MM/yyyy HH:mm")
+            </p>
+
+        </div>
+
+        <a href="/AnalisesCulturas/Create" class="action-link">
+            Fazer nova análise
+        </a>
+
+        <div style="margin-top: 18px;">
+            <a href="/AnalisesCulturas/Index"
+                   style="
+                color: #6f8f44;
+                font-size: 15px;
+                text-decoration: none;
+                font-weight: 500;
+                transition: 0.3s;
+                ">
+                ← Voltar para análises
+            </a>
+        </div>
+
+    </section>
+
+</div>

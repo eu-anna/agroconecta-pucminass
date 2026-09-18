@@ -1,0 +1,224 @@
+﻿@model AgroConecta.Models.Pedido
+@using System.Globalization
+
+@{
+    ViewData["Title"] = "Detalhes do Pedido";
+}
+@if (TempData["Erro"] != null)
+{
+    <div class="alert alert-danger alert-dismissible fade show">
+        @TempData["Erro"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+
+@if (TempData["Sucesso"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show">
+        @TempData["Sucesso"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+<div class="container mt-5">
+    <h4 class="text-center fw-semibold mb-4 text-success">Detalhes do Pedido</h4>
+
+    <div class="row g-4 max-w-900 mx-auto" style="max-width: 960px;">
+
+        <div class="col-12 col-lg-7">
+            <div class="card shadow-sm border-0 rounded-4 p-4 mb-4 bg-white">
+                <h5 class="fw-bold text-dark mb-3">
+                    <i class="bi bi-geo-alt-fill text-success me-2"></i>Informações de Entrega
+                </h5>
+
+                <div class="row g-3 text-secondary small">
+                    <div class="col-12">
+                        <label class="d-block fw-semibold text-black-50 mb-1">Destinatário</label>
+                        <p class="text-dark fw-medium fs-6 mb-0">@Model.NomeCliente</p>
+                    </div>
+
+                    <div class="col-12">
+                        <label class="d-block fw-semibold text-black-50 mb-1">Endereço Completo</label>
+                        <p class="text-dark fw-medium mb-0">@Model.EnderecoEntrega</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card shadow-sm border-0 rounded-4 p-4 mb-4 bg-white">
+                <h5 class="fw-bold text-dark mb-3">
+                    <i class="bi bi-info-circle-fill text-success me-2"></i>Status do Pedido
+                </h5>
+
+                <div class="row g-3 text-secondary small">
+                    <div class="col-6">
+                        <label class="d-block fw-semibold text-black-50 mb-1">Situação Atual</label>
+                        <span class="badge rounded-5 px-3 py-2 fw-semibold fs-6"
+                              style="@(Model.Status == StatusPedido.Entregue ? "background-color: #f0f4ea; color: #496326;" : "background-color: #fff4e5; color: #856404;")">
+                            @Model.Status
+                        </span>
+                    </div>
+
+                    <div class="col-6">
+                        <label class="d-block fw-semibold text-black-50 mb-1">Data do Pedido</label>
+                        <p class="text-dark fw-medium fs-6 mb-0">@Model.CriadoEm.ToString("dd/MM/yyyy HH:mm")</p>
+                    </div>
+                </div>
+            </div>
+
+            @if (Model.Status == StatusPedido.Entregue)
+            {
+
+                @if (ViewBag.Avaliacao == null)
+                {
+                <div class="card shadow-sm border-0 rounded-4 p-4 bg-white">
+                    <h5 class="fw-bold mb-3" style="color: #496326;">
+                        <i class="bi bi-star-fill text-success me-2"></i>Avalie sua Compra
+                    </h5>
+
+                    <form asp-controller="Avaliacoes" asp-action="Criar" method="post">
+
+                        <input type="hidden" name="PedidoId" value="@Model.Id" />
+
+                        <div class="mb-3">
+                            <label class="form-label text-secondary small fw-semibold d-block">
+                                Sua Nota (1 a 5 estrelas):
+                            </label>
+
+                            <div class="rating-stars d-flex flex-row-reverse justify-content-end gap-1 fs-3">
+                                <input type="radio" name="Classificacao" value="5" id="star5" class="d-none"><label for="star5" class="bi bi-star-fill pointer-event"></label>
+                                <input type="radio" name="Classificacao" value="4" id="star4" class="d-none"><label for="star4" class="bi bi-star-fill pointer-event"></label>
+                                <input type="radio" name="Classificacao" value="3" id="star3" class="d-none"><label for="star3" class="bi bi-star-fill pointer-event"></label>
+                                <input type="radio" name="Classificacao" value="2" id="star2" class="d-none"><label for="star2" class="bi bi-star-fill pointer-event"></label>
+                                <input type="radio" name="Classificacao" value="1" id="star1" class="d-none"><label for="star1" class="bi bi-star-fill pointer-event"></label>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="Titulo" class="form-label text-secondary small fw-semibold">Título da avaliação:</label>
+                            <input type="text" id="Titulo" name="Titulo"
+                                   class="form-control rounded-4 border p-3"
+                                   placeholder="Resumo da experiência" />
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="Conteudo" class="form-label text-secondary small fw-semibold">
+                                Deixe um comentário sobre a experiência:
+                            </label>
+
+                            <textarea id="Conteudo" name="Conteudo"
+                                      class="form-control rounded-4 border p-3"
+                                      rows="3"
+                                      placeholder="Escreva aqui..."></textarea>
+                        </div>
+
+                        <div class="text-end">
+                            <button type="submit"
+                                    class="btn btn-success rounded-5 fw-bold px-4 py-2 shadow-sm fs-6">
+                                Enviar Avaliação
+                            </button>
+                        </div>
+
+                    </form>
+                </div>
+                } else
+                {
+                    var avaliacao = (AgroConecta.Models.Avaliacao)ViewBag.Avaliacao;
+
+                    <div class="card shadow-sm border-0 rounded-4 p-4 bg-white">
+                        <h5 class="fw-bold mb-3 text-success">
+                            Sua Avaliação
+                        </h5>
+
+                        <h6>@avaliacao.Titulo</h6>
+
+                        <div class="mb-2">
+                            @for (int i = 0; i < avaliacao.Classificacao; i++)
+                            {
+                                <i class="bi bi-star-fill text-warning"></i>
+                            }
+                        </div>
+
+                        <p>@avaliacao.Conteudo</p>
+
+                        <small class="text-muted">
+                            @avaliacao.CriadoEm.ToString("dd/MM/yyyy HH:mm")
+                        </small>
+                    </div>
+                }
+            }
+        </div>
+
+        <div class="col-12 col-lg-5">
+            <div class="card shadow-sm border-0 rounded-4 p-4 bg-white sticky-lg-top" style="max-height: 85vh; top: 20px;">
+                <h5 class="fw-bold text-dark mb-3">Itens Comprados</h5>
+
+                <div class="overflow-auto pe-1 mb-3" style="max-height: 340px;">
+                    @if (Model.Itens != null)
+                    {
+                        foreach (var item in Model.Itens)
+                        {
+                            <div class="d-flex justify-content-between align-items-center mb-2 pb-2 border-bottom border-light">
+                                <div class="text-truncate me-2" style="max-width: 70%;">
+                                    <span class="fw-bold text-secondary small">@(item.Quantidade)x</span>
+                                    <span class="text-dark small fw-medium">@item.Produto?.Nome</span>
+                                </div>
+                                <span class="text-dark small fw-semibold text-nowrap">
+                                    @((item.Quantidade * item.Produto?.Preco)?.ToString("C", CultureInfo.CreateSpecificCulture("pt-BR")))
+                                </span>
+                            </div>
+                        }
+                    }
+                </div>
+
+                <div class="d-flex justify-content-between align-items-center pt-2 mb-4 border-top">
+                    <span class="text-secondary fw-medium">Total do Pedido:</span>
+                    <h4 class="fw-bold mb-0 text-success fs-4">
+                        @Model.Total.ToString("C", CultureInfo.CreateSpecificCulture("pt-BR"))
+                    </h4>
+                </div>
+
+                <div class="d-grid gap-2">
+                    @if (Model.Status == StatusPedido.Aguardando_pagamento)
+                    {
+                        <form asp-controller="Transacoes" asp-action="Create" method="post" class="d-grid mb-1">
+                            @Html.AntiForgeryToken()
+
+                            <input type="hidden" name="PedidoId" value="@Model.Id" />
+                            <input type="hidden" name="TipoPagamento" value="MercadoPago" />
+
+                            <input type="hidden" name="Pedido.NomeCliente" value="@Model.NomeCliente" />
+                            <input type="hidden" name="Pedido.Logradouro" value="@Model.EnderecoEntrega.Split(',')[0]" />
+                            <input type="hidden" name="Pedido.Numero" value="0" />
+                            <input type="hidden" name="Pedido.Bairro" value="Bairro" />
+                            <input type="hidden" name="Pedido.Cidade" value="Cidade" />
+                            <input type="hidden" name="Pedido.Estado" value="UF" />
+                            <input type="hidden" name="Pedido.Cep" value="00000-000" />
+
+                            <button type="submit" class="btn btn-success btn-sm rounded-5 py-2 fw-bold shadow-sm">
+                                Pagar Agora
+                            </button>
+                        </form>
+                    }
+
+                    <a asp-action="ManageUserPurchases" class="btn btn-light btn-sm text-black-50 border rounded-5 py-2">
+                         Voltar para Meus Pedidos
+                    </a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<style>
+    .rating-stars label {
+        color: #ced4da;
+        cursor: pointer;
+        transition: color 0.15s ease-in-out;
+    }
+
+        .rating-stars input:checked ~ label,
+        .rating-stars label:hover,
+        .rating-stars label:hover ~ label {
+            color: #ffc107;
+        }
+</style>

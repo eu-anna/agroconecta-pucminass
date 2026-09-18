@@ -1,0 +1,49 @@
+﻿@model AgroConecta.Models.Cultura
+@{
+    ViewData["Title"] = "Cadastrar Cultura";
+}
+<h1 class="page-title">Cadastrar Cultura</h1>
+<div class="agro-card form-card">
+    <form asp-action="Create" method="post">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+        <select asp-for="PropriedadeId" class="agro-input" asp-items="ViewBag.PropriedadeId">
+            <option value="">Selecione a propriedade</option>
+        </select>
+        <span asp-validation-for="PropriedadeId" class="text-danger"></span>
+
+        <input asp-for="NomeCultura" class="agro-input" placeholder="Nome da cultura" />
+        <span asp-validation-for="NomeCultura" class="text-danger"></span>
+
+        <input asp-for="AreaPlantio" type="number" step="0.01" min="0" class="agro-input" placeholder="Área de plantio" />
+        <span asp-validation-for="AreaPlantio" class="text-danger"></span>
+
+        <input asp-for="DataPlantio" type="datetime-local" class="agro-input" />
+        <span asp-validation-for="DataPlantio" class="text-danger"></span>
+
+        <input asp-for="DataPrevistaColheita" type="datetime-local" class="agro-input" />
+        <span asp-validation-for="DataPrevistaColheita" class="text-danger"></span>
+
+        <input asp-for="DataIrrigacao" type="datetime-local" class="agro-input" />
+        <span asp-validation-for="DataIrrigacao" class="text-danger"></span>
+
+        <select asp-for="Status" class="agro-input">
+            <option value="">Selecione o status</option>
+            <option value="Plantada">Plantada</option>
+            <option value="Em crescimento">Em crescimento</option>
+            <option value="Pronta para colheita">Pronta para colheita</option>
+            <option value="Colhida">Colhida</option>
+            <option value="Cancelada">Cancelada</option>
+        </select>
+        <span asp-validation-for="Status" class="text-danger"></span>
+
+        <div class="form-actions">
+            <button type="submit" class="agro-btn">Salvar</button>
+            <a asp-action="Index" class="agro-link">Voltar</a>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

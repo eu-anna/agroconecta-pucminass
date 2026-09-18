@@ -1,0 +1,38 @@
+﻿@model AgroConecta.Models.CategoriaProduto
+
+@{
+    ViewData["Title"] = "Cadastrar Categoria";
+}
+
+<h4 class="text-center fw-semibold mt-5" style="color: #496326;">Cadastrar Categoria</h4>
+<hr class="mb-4" />
+
+<div class="container">
+    <div class="row shadow-lg p-5 rounded-5 m-auto" style="max-width: 500px;">
+        <div class="col-md-12">
+            <form asp-action="Create">
+                <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                <div class="form-group mb-4">
+                    <input asp-for="Nome" class="form-control rounded-5 p-3 shadow-sm" placeholder="Ex: Grãos, Frutas..." />
+                    <span asp-validation-for="Nome" class="text-danger"></span>
+                </div>
+
+                <div class="form-group d-grid gap-2">
+                    <input type="submit" value="Salvar Categoria" class="btn btn-md rounded-5 fw-semibold p-2"
+                           style="background-color: #496326; color: #fff;" />
+                    
+                    <a asp-action="Index" class="btn btn-light text-decoration-none rounded-5 text-muted fw-light mt-2">
+                        Voltar para as categorias
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

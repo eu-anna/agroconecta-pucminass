@@ -1,0 +1,140 @@
+﻿@model AgroConecta.Models.Transacao
+@using System.Globalization
+
+@{
+    ViewData["Title"] = "Finalizar Pedido";
+}
+
+<div class="container mt-5">
+    <h4 class="text-center fw-semibold mb-4 text-success">Finalizar Pedido</h4>
+
+    <form asp-action="Create" method="post" id="formCheckout">
+        @Html.AntiForgeryToken()
+
+        <input type="hidden" asp-for="PedidoId" />
+        <input type="hidden" asp-for="TipoPagamento" value="MercadoPago" />
+
+        <div class="row g-4 max-w-900 mx-auto" style="max-width: 960px;">
+
+            <div class="col-12 col-lg-7">
+                <div class="card shadow-sm border-0 rounded-4 p-4 bg-white">
+                    <h5 class="fw-bold text-dark mb-3">Endereço de Entrega</h5>
+
+                    <div class="row g-3">
+                        <div class="col-12">
+                            <label class="form-label small fw-semibold text-secondary">Quem irá receber?</label>
+                            <input type="text" asp-for="Pedido.NomeCliente" class="form-control rounded-4 py-2 px-3 border" placeholder="Nome completo do destinatário" required />
+                            <span class="text-danger small" asp-validation-for="Pedido.NomeCliente"></span>
+                        </div>
+
+                        <div class="col-12 col-sm-6">
+                            <label class="form-label small fw-semibold text-secondary">CEP</label>
+                            <input type="text" asp-for="Pedido.Cep" class="form-control rounded-4 py-2 px-3 border" placeholder="00000-000" required />
+                            <span class="text-danger small" asp-validation-for="Pedido.Cep"></span>
+                        </div>
+
+                        <div class="col-12 col-sm-6">
+                            <label class="form-label small fw-semibold text-secondary">Bairro</label>
+                            <input type="text" asp-for="Pedido.Bairro" class="form-control rounded-4 py-2 px-3 border" placeholder="Ex: Centro" required />
+                            <span class="text-danger small" asp-validation-for="Pedido.Bairro"></span>
+                        </div>
+
+                        <div class="col-12 col-sm-9">
+                            <label class="form-label small fw-semibold text-secondary">Logradouro (Rua/Avenida)</label>
+                            <input type="text" asp-for="Pedido.Logradouro" class="form-control rounded-4 py-2 px-3 border" placeholder="Rua, Avenida..." required />
+                            <span class="text-danger small" asp-validation-for="Pedido.Logradouro"></span>
+                        </div>
+
+                        <div class="col-12 col-sm-3">
+                            <label class="form-label small fw-semibold text-secondary">Número</label>
+                            <input type="text" asp-for="Pedido.Numero" class="form-control rounded-4 py-2 px-3 border" placeholder="Nº" required />
+                            <span class="text-danger small" asp-validation-for="Pedido.Numero"></span>
+                        </div>
+
+                        <div class="col-12 col-sm-8">
+                            <label class="form-label small fw-semibold text-secondary">Cidade</label>
+                            <input type="text" asp-for="Pedido.Cidade" class="form-control rounded-4 py-2 px-3 border" placeholder="Cidade" required />
+                            <span class="text-danger small" asp-validation-for="Pedido.Cidade"></span>
+                        </div>
+
+                        <div class="col-12 col-sm-4">
+                            <label class="form-label small fw-semibold text-secondary">Estado</label>
+                            <select asp-for="Pedido.Estado" class="form-select rounded-4 py-2 px-3 border" required>
+                                <option value="">Selecione...</option>
+                                <option value="AC">Acre</option>
+                                <option value="AL">Alagoas</option>
+                                <option value="AP">Amapá</option>
+                                <option value="AM">Amazonas</option>
+                                <option value="BA">Bahia</option>
+                                <option value="CE">Ceará</option>
+                                <option value="DF">Distrito Federal</option>
+                                <option value="ES">Espírito Santo</option>
+                                <option value="GO">Goiás</option>
+                                <option value="MA">Maranhão</option>
+                                <option value="MT">Mato Grosso</option>
+                                <option value="MS">Mato Grosso do Sul</option>
+                                <option value="MG">Minas Gerais</option>
+                                <option value="PA">Pará</option>
+                                <option value="PB">Paraíba</option>
+                                <option value="PR">Paraná</option>
+                                <option value="PE">Pernambuco</option>
+                                <option value="PI">Piauí</option>
+                                <option value="RJ">Rio de Janeiro</option>
+                                <option value="RN">Rio Grande do Norte</option>
+                                <option value="RS">Rio Grande do Sul</option>
+                                <option value="RO">Rondônia</option>
+                                <option value="RR">Roraima</option>
+                                <option value="SC">Santa Catarina</option>
+                                <option value="SP">São Paulo</option>
+                                <option value="SE">Sergipe</option>
+                                <option value="TO">Tocantins</option>
+                            </select>
+                            <span class="text-danger small" asp-validation-for="Pedido.Estado"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12 col-lg-5">
+                <div class="card shadow-sm border-0 rounded-4 p-4 bg-white sticky-lg-top" style="max-height: 85vh; top: 20px;">
+                    <h5 class="fw-bold text-dark mb-3">Resumo do Pedido</h5>
+
+                    <div class="overflow-auto pe-1 mb-3" style="max-height: 240px;">
+                        @if (Model.Pedido?.Itens != null)
+                        {
+                            foreach (var item in Model.Pedido.Itens)
+                            {
+                                <div class="d-flex justify-content-between align-items-center mb-2 pb-2 border-bottom border-light">
+                                    <div class="text-truncate me-2" style="max-width: 70%;">
+                                        <span class="fw-bold text-secondary small">@(item.Quantidade)x</span>
+                                        <span class="text-dark small fw-medium">@item.Produto?.Nome</span>
+                                    </div>
+                                    <span class="text-dark small fw-semibold text-nowrap">
+                                        @((item.Quantidade * item.Produto?.Preco)?.ToString("C", CultureInfo.CreateSpecificCulture("pt-BR")))
+                                    </span>
+                                </div>
+                            }
+                        }
+                    </div>
+
+                    <div class="d-flex justify-content-between align-items-center pt-2 mb-4 border-top">
+                        <span class="text-secondary fw-medium">Total a pagar:</span>
+                        <h4 class="fw-bold mb-0 text-success fs-4">
+                            @Model.Pedido?.Total.ToString("C", CultureInfo.CreateSpecificCulture("pt-BR"))
+                        </h4>
+                    </div>
+
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-success rounded-5 fw-bold py-2 shadow-sm fs-6">
+                            Ir para Pagamento <i class="bi bi-arrow-right-circle-fill ms-2"></i>
+                        </button>
+                        <a asp-controller="Pedidos" asp-action="Index" class="btn btn-light btn-sm text-black-50 border rounded-5 py-2">
+                            Voltar ao Carrinho
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </form>
+</div>

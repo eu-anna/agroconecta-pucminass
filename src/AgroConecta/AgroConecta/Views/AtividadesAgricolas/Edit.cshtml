@@ -1,0 +1,56 @@
+﻿@model AgroConecta.Models.AtividadeAgricola
+
+@{
+    ViewData["Title"] = "Editar Atividade Agrícola";
+}
+
+<div class="agro-page">
+
+    <h2>Editar Atividade Agrícola</h2>
+
+    <section class="atividade-card">
+
+        <form asp-action="Edit" method="post" class="atividade-form">
+
+            <input type="hidden" asp-for="Id" />
+
+            <select asp-for="PropriedadeId" asp-items="ViewBag.PropriedadeId">
+                <option value="">Selecione a propriedade</option>
+            </select>
+
+            <select asp-for="CulturaId" asp-items="ViewBag.CulturaId">
+                <option value="">Selecione a cultura</option>
+            </select>
+
+            <input asp-for="DataInicio" type="date" />
+
+            <input asp-for="DataFim" type="date" />
+
+            <select asp-for="Tipo">
+                <option value="">Selecione o tipo</option>
+                <option value="Plantio">Plantio</option>
+                <option value="Irrigação">Irrigação</option>
+                <option value="Adubação">Adubação</option>
+                <option value="Colheita">Colheita</option>
+            </select>
+
+            <select asp-for="Status">
+                <option value="">Selecione o status</option>
+                <option value="Planejada">Planejada</option>
+                <option value="Em Andamento">Em Andamento</option>
+                <option value="Concluída">Concluída</option>
+                <option value="Cancelada">Cancelada</option>
+            </select>
+
+            <textarea asp-for="Descricao" placeholder="Descrição"></textarea>
+
+            <div class="form-actions">
+                <button type="submit">Salvar</button>
+                <a asp-action="Index">Voltar</a>
+            </div>
+
+        </form>
+
+    </section>
+
+</div>

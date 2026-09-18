@@ -1,0 +1,92 @@
+﻿@model AgroConecta.Models.AnaliseCultura
+
+@{
+    ViewData["Title"] = "Análise da Cultura";
+}
+
+<div class="analise-page">
+
+    <h2>Análise da Cultura</h2>
+
+    <form asp-action="Create"
+          method="post"
+          enctype="multipart/form-data"
+          class="upload-card">
+
+        <div asp-validation-summary="All" style="color:#8b2f2f; font-weight:bold; margin: 10px;"></div>
+
+        <div class="upload-header">
+
+            <div class="upload-icon">☁</div>
+
+            <div>
+                <h3>Upload de arquivos</h3>
+                <p>Escolha os arquivos que deseja enviar</p>
+            </div>
+
+            <a asp-controller="AnalisesCulturas"
+               asp-action="Index"
+               class="close-upload">×</a>
+
+        </div>
+
+        <div class="upload-area">
+
+            <div class="cloud-icon">☁</div>
+
+            <p>Arraste e solte o arquivo aqui ou clique para selecionar</p>
+
+            <span>JPEG e PNG — máximo 2MB</span>
+            <select asp-for="CulturaId" asp-items="ViewBag.Culturas" class="select-cultura">
+                <option value="">Selecione a cultura</option>
+            </select>
+            <input name="ArquivoImagem"
+       type="file"
+       accept="image/png, image/jpeg"
+       class="file-input"
+       id="ArquivoImagem" />
+
+            <p id="erroImagem"
+                   style="color:#8b2f2f; font-size:13px; font-weight:bold;">
+            </p>
+
+            <button type="submit"
+                    class="browse-button"
+                    onclick="return mostrarLoading()">
+                Analisar
+            </button>
+
+            <p id="loadingAnalise"
+                   style="display:none; color:#4d6f2d; font-weight:bold; margin-top:15px;">
+                Analisando imagem, aguarde...
+            </p>
+
+        </div>
+
+    </form>
+
+</div>
+
+<script>
+    function mostrarLoading() {
+        const arquivo = document.getElementById("ArquivoImagem").files[0];
+        const erro = document.getElementById("erroImagem");
+
+        erro.textContent = "";
+
+        if (!arquivo) {
+            erro.textContent = "Selecione uma imagem antes de analisar.";
+            return false;
+        }
+
+        const tamanhoMaximo = 2 * 1024 * 1024;
+
+        if (arquivo.size > tamanhoMaximo) {
+            erro.textContent = "A imagem deve ter no máximo 2MB.";
+            return false;
+        }
+
+        document.getElementById("loadingAnalise").style.display = "block";
+        return true;
+    }
+</script>

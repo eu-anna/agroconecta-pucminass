@@ -1,0 +1,49 @@
+@model AgroConecta.Models.Relatorio
+
+@{
+    ViewData["Title"] = "Detalhes do Relatório";
+}
+
+<h1 class="page-title">Detalhes do Relatório</h1>
+
+<div class="agro-card form-card">
+
+    <div class="details-list">
+
+        <p>
+            <strong>Propriedade:</strong>
+            <span>@Model.Propriedade?.Nome</span>
+        </p>
+
+        <p>
+            <strong>Técnico:</strong>
+            <span>@Model.TecnicoId</span>
+        </p>
+
+        <p>
+            <strong>Data:</strong>
+            <span>@Model.CriadoEm.ToString("dd/MM/yyyy")</span>
+        </p>
+
+    </div>
+
+    <div style="margin-top:30px;">
+        <h4>Conteúdo</h4>
+        <p>@Model.Conteudo</p>
+    </div>
+
+    @if (!string.IsNullOrEmpty(Model.ImagemPath))
+    {
+        <div style="margin-top:20px;">
+            <img src="@Model.ImagemPath"
+                 style="max-width:100%;border-radius:12px;" />
+        </div>
+    }
+
+    <div style="margin-top:32px;">
+        <a asp-controller="Relatorios" asp-action="Index" class="agro-btn">
+            Voltar
+        </a>
+    </div>
+
+</div>

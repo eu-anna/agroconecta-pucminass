@@ -1,0 +1,107 @@
+﻿@model IEnumerable<AgroConecta.Models.AtividadeAgricola>
+
+@{
+    ViewData["Title"] = "Atividades Agrícolas";
+}
+
+<div class="agro-page">
+
+    <h2>Atividades Agrícolas</h2>
+
+    <section class="atividade-card">
+
+        <table class="atividade-table">
+
+            <thead>
+                <tr>
+                    <th>Início</th>
+                    <th class="desktop-only">Fim</th>
+                    <th class="desktop-only">Propriedade</th>
+                    <th class="desktop-only">Tipo</th>
+                    <th class="desktop-only">Status</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                @foreach (var atividade in Model)
+                {
+                    <tr>
+                        <td>
+                            @atividade.DataInicio.ToString("dd/MM/yyyy")
+                        </td>
+
+                        <td class="desktop-only">
+                            @(atividade.DataFim?.ToString("dd/MM/yyyy"))
+                        </td>
+
+                        <td class="desktop-only">
+                            @atividade.Propriedade?.Nome
+                        </td>
+
+                        <td class="desktop-only">
+                            @atividade.Tipo
+                        </td>
+
+                        <td class="desktop-only">
+                            @atividade.Status
+                        </td>
+
+                        <td>
+                            <div class="desktop-only">
+                                <a asp-action="Edit"
+                                       asp-route-id="@atividade.Id"
+                                       class="action-link">
+                                    Editar
+                                </a>
+                            </div>
+
+                            <details class="mobile-details">
+                                <summary>Ver mais ▼</summary>
+
+                                <p>
+                                    <strong>Fim:</strong><br />
+                                    @(atividade.DataFim?.ToString("dd/MM/yyyy"))
+                                </p>
+
+                                <p>
+                                    <strong>Propriedade:</strong><br />
+                                    @atividade.Propriedade?.Nome
+                                </p>
+
+                                <p>
+                                    <strong>Tipo:</strong><br />
+                                    @atividade.Tipo
+                                </p>
+
+                                <p>
+                                    <strong>Status:</strong><br />
+                                    @atividade.Status
+                                </p>
+
+                                <a asp-action="Edit"
+                                       asp-route-id="@atividade.Id"
+                                       class="action-link">
+                                    Editar
+                                </a>
+                            </details>
+                        </td>
+                    </tr>
+                }
+
+                <tr>
+                    <td colspan="6">
+                        <a class="nova-linha" href="/AtividadesAgricolas/Create">
+                            + Nova linha
+                        </a>
+                    </td>
+                </tr>
+
+            </tbody>
+
+        </table>
+
+    </section>
+
+</div>

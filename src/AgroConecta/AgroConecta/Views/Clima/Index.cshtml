@@ -1,0 +1,169 @@
+﻿@{
+    ViewData["Title"] = "Clima";
+}
+
+<div class="clima-page">
+
+    <h1 class="titulo-clima">Informações Climáticas</h1>
+
+    <div class="clima-card">
+
+        <div class="barra-pesquisa">
+            <span class="icone-busca">🔍</span>
+
+            <input type="text"
+                   id="cidadeInput"
+                   placeholder="Digite uma cidade..." />
+
+            <button onclick="buscarClima()">Buscar</button>
+        </div>
+
+        <div class="conteudo-clima">
+
+            <div class="clima-hoje">
+                <h2>Hoje</h2>
+
+                <div class="temperatura-area">
+
+                    <span class="icone-clima"
+                          id="iconeClima">
+                    </span>
+
+                    <h1 id="temperatura">--</h1>
+                </div>
+
+                <p id="cidadeNome">Nenhum local pesquisado</p>
+                <span id="dataHoje">--</span>
+            </div>
+
+            <div class="clima-lista" id="listaPrevisao"></div>
+
+        </div>
+
+        <button class="btn-limpar" onclick="limparClima()">
+            Limpar pesquisas
+        </button>
+
+    </div>
+</div>
+
+<script>
+    let pesquisasClima = JSON.parse(localStorage.getItem("pesquisasClima")) || [];
+
+    window.onload = () => {
+        atualizarTela();
+
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                function () {
+                    console.log("GPS permitido.");
+                },
+                function () {
+                    console.log("GPS negado.");
+                }
+            );
+        }
+    };
+
+    async function buscarClima() {
+        const cidade = document.getElementById("cidadeInput").value.trim();
+
+        if (!cidade) {
+            alert("Digite o nome da cidade.");
+            return;
+        }
+
+        try {
+            const geoResponse = await fetch(
+                `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(cidade)}&count=1&language=pt&format=json`
+            );
+
+            const geoData = await geoResponse.json();
+
+            if (!geoData.results || geoData.results.length === 0) {
+                alert("Cidade não encontrada.");
+                return;
+            }
+
+            const local = geoData.results[0];
+
+            const climaResponse = await fetch(
+                `https://api.open-meteo.com/v1/forecast?latitude=${local.latitude}&longitude=${local.longitude}&current=temperature_2m,relative_humidity_2m,wind_speed_10m&timezone=auto`
+            );
+
+            const climaData = await climaResponse.json();
+
+            const temperatura = Math.round(climaData.current.temperature_2m);
+            const umidade = Math.round(climaData.current.relative_humidity_2m);
+
+            const novaPesquisa = {
+                cidade: `${local.name}${local.admin1 ? ", " + local.admin1 : ""}`,
+                temperatura: temperatura,
+                umidade: umidade,
+                data: new Date().toLocaleDateString("pt-BR")
+            };
+
+            pesquisasClima.push(novaPesquisa);
+
+            localStorage.setItem("pesquisasClima", JSON.stringify(pesquisasClima));
+
+            atualizarTela();
+
+            document.getElementById("cidadeInput").value = "";
+        }
+        catch {
+            alert("Erro ao buscar clima.");
+        }
+    }
+
+    function escolherIconeClima(temperatura) {
+        if (temperatura >= 30) return "☀️";
+        if (temperatura >= 22) return "🌤️";
+        if (temperatura >= 16) return "🌧️";
+        if (temperatura >= 10) return "☁️";
+        return "❄️";
+    }
+
+    function atualizarTela() {
+        const lista = document.getElementById("listaPrevisao");
+        lista.innerHTML = "";
+
+        pesquisasClima.forEach(item => {
+               lista.innerHTML += `
+                   <div class="clima-item">
+                        <span>${item.data}</span>
+                        <span>${item.cidade}</span>
+                        <span>${item.temperatura} °C</span>
+                        <span>Umidade: ${item.umidade}%</span>
+                  </div>
+               `;
+        });
+
+        const ultima = pesquisasClima[pesquisasClima.length - 1];
+
+        if (ultima) {
+            document.getElementById("cidadeNome").innerText = ultima.cidade;
+            document.getElementById("temperatura").innerText = ultima.temperatura + "°";
+            document.getElementById("dataHoje").innerText = ultima.data;
+
+            document.getElementById("iconeClima").style.display = "flex";
+            document.getElementById("iconeClima").innerText =
+                escolherIconeClima(ultima.temperatura);
+        }
+        else {
+            document.getElementById("cidadeNome").innerText = "Nenhum local pesquisado";
+            document.getElementById("temperatura").innerText = "--";
+            document.getElementById("dataHoje").innerText = "--";
+
+            document.getElementById("iconeClima").style.display = "none";
+        }
+    }
+
+    function limparClima() {
+        pesquisasClima = [];
+        localStorage.removeItem("pesquisasClima");
+
+        document.getElementById("cidadeInput").value = "";
+        atualizarTela();
+    }
+</script>

@@ -1,0 +1,44 @@
+﻿@model AgroConecta.Models.TopicoModel
+
+@{
+    Layout = "_Layout";
+    ViewData["Title"] = "Criar Tópico";
+}
+
+<div class="d-flex flex-column vh-100">
+    <header>
+        <h1 class="text-center mt-5 page-title">Novo Tópico</h1>
+    </header>
+
+    <div class="d-flex flex-column justify-content-center align-items-center w-75 m-auto flex-grow-1">
+        <div class="w-100 d-flex flex-column justify-content-center align-items-center card-container overflow-auto py-4">
+            <form class="d-flex flex-column justify-content-center align-items-center gap-4 w-100" asp-controller="Topicos" asp-action="Create" method="post">
+            
+                <div asp-validation-summary="All" class="text-danger fw-bold mb-3"></div>
+
+                <input type="hidden" asp-for="CategoriaId" />
+
+                <div class="form-group w-75">
+                    <input asp-for="Titulo" class="form-control input" placeholder="Ex: Dúvida sobre o plantio de milho" />
+                    <span asp-validation-for="Titulo" class="text-danger"></span>
+                </div>
+
+                <div class="form-group w-75">
+                    <textarea asp-for="Conteudo" class="form-control input rounded-5" rows="5" placeholder="Escreva os detalhes do seu tópico aqui..."></textarea>
+                    <span asp-validation-for="Conteudo" class="text-danger"></span>
+                </div>
+
+                <div class="form-group d-flex flex-column justify-content-center align-items-center w-100 mt-2">
+                    <input type="submit" value="Publicar Tópico" class="btn-green w-25 mb-3" />
+                    <a asp-action="Index" asp-route-categoriaId="@Model.CategoriaId" class="btn-transparent text-decoration-none">Cancelar</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

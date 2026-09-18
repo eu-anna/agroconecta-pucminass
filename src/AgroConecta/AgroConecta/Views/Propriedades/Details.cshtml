@@ -1,0 +1,45 @@
+@model AgroConecta.Models.Propriedade
+
+@{
+    ViewData["Title"] = "Detalhes da Propriedade";
+}
+
+<h1 class="page-title">Detalhes da Propriedade</h1>
+
+<div class="agro-card form-card">
+
+    <div class="details-list">
+
+        <p>
+            <strong>Nome:</strong>
+            <span>@Model.Nome</span>
+        </p>
+
+        <p>
+            <strong>Área:</strong>
+            <span>@Model.Area ha</span>
+        </p>
+
+        <p>
+            <strong>Localização:</strong>
+            <span>@Model.LocalizacaoGeo</span>
+        </p>
+
+        <p>
+            <strong>CIB:</strong>
+            <span>@Model.Cib</span>
+        </p>
+
+    </div>
+
+    <div class="form-actions">
+        <a asp-action="Edit" asp-route-id="@Model.Id" class="agro-btn">
+            Editar
+        </a>
+
+        <a asp-action="Index" class="agro-link">
+            Voltar para lista
+        </a>
+    </div>
+
+</div>

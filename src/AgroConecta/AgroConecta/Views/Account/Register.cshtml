@@ -1,0 +1,84 @@
+@model AgroConecta.Models.Usuario
+
+@{
+    ViewData["Title"] = "Cadastro";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cadastro - AgroConecta</title>
+
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+
+    <style>
+            input:invalid:not(:placeholder-shown),
+            select:invalid {
+                border-color: #b42323 !important;
+            }
+    </style>
+</head>
+<body>
+
+    <div class="container d-flex justify-content-center align-items-center vh-100">
+
+        <div class="agro-card form-card" style="max-width: 460px; width: 100%;">
+
+            <h1 class="page-title text-center">Criar conta</h1>
+            <p class="text-center mb-4">Cadastre-se no AgroConecta</p>
+
+            @if (ViewBag.Erro != null)
+            {
+                <div class="alert alert-danger">
+                    @ViewBag.Erro
+                </div>
+            }
+
+            <form asp-action="Register" method="post">
+
+                <input asp-for="Nome"
+                       class="agro-input"
+                       placeholder="Nome completo"
+                       required />
+
+                <input asp-for="Email"
+                       type="email"
+                       class="agro-input"
+                       placeholder="Email"
+                       required />
+
+                <input asp-for="Senha"
+                       type="password"
+                       class="agro-input"
+                       placeholder="Senha"
+                       required />
+
+                <select asp-for="TipoUsuario" class="agro-input" required>
+                    <option value="">Selecione o tipo de usuário</option>
+                    <option value="Produtor">Produtor</option>
+                    <option value="Consumidor">Consumidor</option>
+                    <option value="Tecnico">Técnico</option>
+                </select>
+
+                <button type="submit" class="agro-btn w-100">
+                    Cadastrar
+                </button>
+
+                <div class="text-center mt-3">
+                    <span>Já tem conta?</span>
+                    <a asp-controller="Account" asp-action="Login">
+                        Entrar
+                    </a>
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+</body>
+</html>

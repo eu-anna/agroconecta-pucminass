@@ -1,0 +1,197 @@
+﻿@model IEnumerable<AgroConecta.Models.Produto>
+
+@{
+    ViewData["Title"] = "Meus Produtos";
+}
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h4 class="fw-semibold mb-1" style="color: #496326;">Meus Produtos</h4>
+            <p class="text-muted small mb-0">Gerencie seus produtos cadastrados</p>
+        </div>
+        <a asp-action="Create" class="btn btn-success rounded-pill px-4 fw-medium shadow-sm">
+            Adicionar Produto
+        </a>
+    </div>
+
+    @if (Model == null || !Model.Any())
+    {
+        <div class="text-center py-5 bg-white shadow-sm rounded-4 px-3 border">
+            <div class="mb-3 text-muted opacity-50">
+                <i class="bi bi-basket fs-1"></i>
+            </div>
+            <h5 class="fw-bold text-dark">Nenhum produto cadastrado</h5>
+            <p class="text-muted small mb-0"> Você ainda não possui produtos anunciados. Clique em "Adicionar Produto" para começar a anunciar em nosso marketplace! </p>
+        </div>
+    }
+    else
+    {
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 h-100 overflow-auto p-1">
+            @foreach (var productItem in Model)
+            {
+                <div class="col">
+                    <div class="card h-100 bg-white shadow-sm border rounded-4 overflow-hidden d-flex flex-row d-md-flex flex-md-column card-hover-effect">
+
+                        <div class="ratio ratio-1x1 d-flex align-items-center justify-content-center bg-light border-end border-md-end-0 border-md-bottom position-relative custom-mobile-img" style="max-height: 260px;">
+                            @if (productItem.Imagem != null && productItem.Imagem.Length > 0)
+                            {
+                                <img src="data:image/jpeg;base64,@Convert.ToBase64String(productItem.Imagem)"
+                                     alt="@productItem.Nome"
+                                     class="w-100 h-100 object-fit-cover" />
+                            }
+                            else
+                            {
+                                <div class="text-muted small fw-semibold opacity-75 text-uppercase w-100 h-100 d-flex align-items-center justify-content-center flex-column">
+                                    <i class="fs-1 bi bi-card-image"></i>
+                                    Sem foto
+                                </div>
+                            }
+                        </div>
+
+                        <div class="card-body p-3 d-flex flex-column justify-content-between flex-grow-1 w-100">
+                            <div>
+                                <div class="d-flex align-items-center justify-content-between mb-1">
+                                    <span class="text-muted text-uppercase fw-bold" style="font-size: 0.65rem;">
+                                        @(productItem.Categoria?.Nome ?? "Sem categoria")
+                                    </span>
+
+                                    <div class="ms-auto d-flex gap-1">
+                                        @if (productItem.Ativo == 1)
+                                        {
+                                            <span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill" style="font-size: 0.65rem;">Visível</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-secondary-subtle text-secondary border border-secondary-subtle rounded-pill" style="font-size: 0.65rem;">Oculto</span>
+                                        }
+
+                                        @if (productItem.Estoque <= 0)
+                                        {
+                                            <span class="badge bg-danger-subtle text-danger border border-danger-subtle rounded-pill" style="font-size: 0.65rem;">Esgotado</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-light text-dark border rounded-pill" style="font-size: 0.65rem;">Qtd: @productItem.Estoque</span>
+                                        }
+                                    </div>
+                                </div>
+
+                                <h5 class="card-title fw-semibold fs-6 lh-base text-dark mb-2">
+                                    @productItem.Nome
+                                </h5>
+                            </div>
+
+                            <div class="mt-2">
+                                <div class="mb-3">
+                                    <h4 class="fw-bold mb-0 text-dark fs-5">R$ @(productItem.Preco.ToString("N2"))</h4>
+                                </div>
+
+                                <div class="d-flex w-100 gap-1">
+                                    <a asp-action="Edit" asp-route-id="@productItem.Id"
+                                       class="btn btn-sm btn-outline-secondary flex-fill rounded-pill fw-medium py-2 text-center">
+                                        Editar
+                                    </a>
+
+                                    <form asp-action="ToggleStatus" asp-route-id="@productItem.Id" method="post" class="flex-fill d-flex">
+                                        @if (productItem.Ativo == 1)
+                                        {
+                                            <button type="submit" class="btn btn-sm btn-warning flex-fill rounded-pill fw-medium text-dark py-2 text-center w-100">
+                                                Ocultar
+                                            </button>
+                                        }
+                                        else
+                                        {
+                                            <button type="submit" class="btn btn-sm btn-success flex-fill rounded-pill fw-medium text-white py-2 text-center w-100">
+                                                Reativar
+                                            </button>
+                                        }
+                                    </form>
+
+                                    <button class="btn btn-danger flex-fill rounded-pill fw-medium text-white py-2 text-center"
+                                            type="button"
+                                            onclick="confirmDelete('@productItem.Id', '@productItem.Nome')">
+                                        Excluir
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>
+
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content rounded-5 border-0 shadow-lg">
+
+            <div class="modal-body p-4">
+                <div class="text-center mb-3">
+                    <p class="text-muted mb-1"> Deseja realmente excluir o produto abaixo? </p>
+                    <h4 class="fw-bold text-dark mb-3" id="productName"></h4>
+                </div>
+
+                <div class="rounded-4 border border-danger text-danger p-3 text-center m-auto">
+                    <i class="bi fs-2 bi-exclamation-triangle-fill mt-2"></i>
+                    <h6 class="fw-bold"> Esta ação será definitiva </h6>
+                </div>
+            </div>
+
+            <div class="modal-footer border-0 d-flex justify-content-between gap-2 p-4 pt-0">
+                <form asp-controller="Produtos" asp-action="Delete" method="post" class="flex-grow-1">
+                    <input type="hidden" name="id" class="js-product-id-input" />
+                    <button type="submit" class="btn btn-danger rounded-5 flex-grow-1 fw-semibold w-100 shadow-sm">
+                        Excluir
+                    </button>
+                </form>
+
+                <button type="button" class="btn btn-outline-light rounded-5 fw-semibold flex-grow-1 p-2 text-muted" data-bs-dismiss="modal">
+                    Cancelar
+                </button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<style>
+    @@media (max-width: 767.98px) {
+        .custom-mobile-img {
+            width: 110px !important;
+            height: 110px !important;
+            flex-shrink: 0;
+        }
+
+            .custom-mobile-img::before {
+                display: none !important;
+            }
+    }
+
+    .card-hover-effect {
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+        .card-hover-effect:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 .5rem 1rem rgba(0, 0, 0, 0.08) !important;
+        }
+</style>
+
+@section Scripts {
+    <script>
+        function confirmDelete(id, nome) {
+            const inputs = document.querySelectorAll('.js-product-id-input');
+            inputs.forEach(input => {
+                input.value = id;
+            });
+
+            document.getElementById('productName').innerText = nome;
+
+            var deletionModal = new bootstrap.Modal(document.getElementById('deleteModal'));
+            deletionModal.show();
+        }
+    </script>
+}

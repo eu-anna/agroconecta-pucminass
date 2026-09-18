@@ -1,0 +1,96 @@
+﻿@model IEnumerable<AgroConecta.Models.CategoriaProduto>
+
+@{
+    ViewData["Title"] = "Categorias";
+}
+
+<div class="container mt-5">
+    <h4 class="text-center fw-semibold mb-4" style="color: #496326;">Categorias de Produtos</h4>
+
+    <div class="row shadow-lg p-4 mx-auto rounded-5 bg-white border-0" style="max-width: 800px;">
+        <div class="col-md-12">
+            
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h5 class="text-black-50 mb-0">Gerenciar Categorias</h5>
+                <a asp-action="Create" class="btn rounded-5 fw-semibold px-4 shadow-sm" style="background-color: #496326; color: #fff;">
+                    Adicionar
+                </a>
+            </div>
+
+            <div class="table-responsive" style="max-height: 400px; overflow-y: auto;">
+                <table class="table align-middle">
+                    <thead class="border-bottom sticky-top bg-white" style="z-index: 1;">
+                        <tr>
+                            <th class="text-black-50 fw-bold ps-3">Nome</th>
+                            <th class="text-end pe-3 text-black-50 fw-bold">Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td class="ps-3 fw-medium text-secondary">@item.Nome</td>
+                                <td class="text-end pe-3">
+                                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn rounded-circle me-2"
+                                           style="background-color: #f0f4ea; color: #496326;" title="Editar">
+                                        <i class="bi bi-pencil-fill"></i>
+                                    </a>
+
+                                    <button type="button" class="btn rounded-circle"
+                                            style="background-color: #fceaea; color: #dc3545;"
+                                            onclick="confirmDelete('@item.Id', '@item.Nome')">
+                                        <i class="bi bi-trash3-fill"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content rounded-5 border-0 shadow-lg">
+            <div class="modal-body p-4" style="max-height: 350px; overflow-y: auto;">
+                <div class="text-center mb-3">
+                    <p class="text-muted mb-2"> <i class="bi bi-exclamation-circle me-2 text-danger"></i> Deseja realmente excluir a categoria abaixo?</p>
+                    <h4 class="fw-bold text-dark mb-3" id="categoryName"></h4>
+                </div>
+
+                <div class="alert alert-warning rounded-4 border-0 mb-0 px-4 py-3" style="background-color: #fff4e5; color: #856404;">
+                    <small>
+                        <i class="bi bi-info-circle-fill me-2"></i>
+                        Caso existam produtos vinculados a esta categoria, o processo de exclusão poderá ser interrompido.
+                    </small>
+                </div>
+            </div>
+
+            <div class="modal-footer border-0 d-flex justify-content-between gap-2 p-4 pt-0">
+                <form asp-action="Delete" method="post" class="flex-grow-1">
+                    <input type="hidden" name="id" id="categoryId" />
+                    <button type="submit" class="btn btn-danger rounded-5 flex-grow-1 fw-semibold w-100 shadow-sm">
+                        Excluir
+                    </button>
+                </form>
+                <button type="button" class="btn btn-light rounded-5 fw-semibold flex-grow-1 border p-2 text-muted" data-bs-dismiss="modal">
+                    Cancelar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function confirmDelete(id, nome) {
+            document.getElementById('categoryId').value = id;
+            document.getElementById('categoryName').innerText = nome;
+            
+            var deletionModal = new bootstrap.Modal(document.getElementById('deleteModal'));
+            deletionModal.show();
+        }
+    </script>
+}

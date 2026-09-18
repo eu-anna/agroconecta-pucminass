@@ -1,0 +1,97 @@
+﻿@model AgroConecta.Models.Produto
+
+@{
+    ViewData["Title"] = "Detalhes Produto";
+    var tipo = Context.Session.GetString("TipoUsuario");
+    var userIdStr = Context.Session.GetString("UsuarioId");
+    var userId = 0;
+
+    if (!string.IsNullOrEmpty(userIdStr))
+    {
+        userId = int.Parse(userIdStr);
+    }
+}
+
+<h4 class="fw-semibold my-4 text-center" style="color: #496326;">Detalhes do Produto</h4>
+
+<div class="row shadow-lg p-4 mx-5 rounded-5 m-auto bg-white">
+    <div class="col-md-12">
+        <div class="row">
+
+            <div class="col-md-6 d-flex align-items-center justify-content-center">
+                <div class="rounded-5 overflow-hidden border shadow-sm" style="width: 100%; height: 380px;">
+                    @if (Model.Imagem != null)
+                    {
+                        <img src="data:image/jpeg;base64,@Convert.ToBase64String(Model.Imagem)"
+                             style="width: 100%; height: 100%; object-fit: cover;" />
+                    }
+                    else
+                    {
+                        <div class="bg-light d-flex align-items-center justify-content-center h-100 text-muted">
+                            Sem Foto
+                        </div>
+                    }
+                </div>
+            </div>
+
+            <div class="col-md-6 ps-md-5 d-flex flex-column justify-content-between py-2">
+                <div>
+                    <span class="badge rounded-pill px-3 py-2 mb-2" style="background-color: #e9f0e4; color: #496326; border: 1px solid #496326;">
+                        <i class="bi bi-tag-fill me-1"></i>
+                        @if (Model.Categoria != null)
+                        {
+                            @Model.Categoria.Nome
+                        }
+                        else
+                        {
+                            <span>Sem Categoria</span>
+                        }
+                    </span>
+
+                    <h2 class="fw-bold text-dark my-2 text-break">@Model.Nome</h2>
+
+                    <h4 class="fw-semibold" style="color: #496326;">R$ @Model.Preco.ToString("N2")</h4>
+
+                    <div class="mt-3">
+                        <span class="text-muted small bg-light p-2 rounded-3">
+                            <i class="bi bi-box-seam me-1"></i> Estoque: @Model.Estoque unidades
+                        </span>
+                    </div>
+                </div>
+
+                @if (userId == Model.Produtor_id)
+                {
+                    <a asp-action="Edit" asp-route-id="@Model.Id"
+                       class="btn btn-lg btn-success px-5 rounded-5 fw-bold shadow-sm mt-3">
+                        Editar
+                    </a>
+                }
+                else
+                {
+                    <form asp-controller="Pedidos" asp-action="AddToCart" method="post">
+                        <input type="hidden" name="Produto_id" value="@Model.Id" />
+                        <button type="submit" class="btn btn-lg btn-success px-5 rounded-5 fw-bold shadow-sm w-100">
+                            Comprar
+                        </button>
+                    </form>
+                }
+            </div>
+        </div>
+
+        <div class="row mt-4">
+            <div class="col-12 px-4">
+                <hr style="border-top: 2px solid #f0f0f0;" />
+                <h5 class="fw-semibold text-dark mb-1">Sobre este produto</h5>
+                <p class="text-secondary lh-md text-break" style="text-align: justify;">
+                    @Model.Descricao
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="text-center mt-4 mb-5">
+    <a asp-action="Index" class="btn btn-link text-decoration-none fw-semibold" style="color: #496326;">
+        <i class="bi bi-chevron-left small"></i> Voltar para a loja
+    </a>
+</div>

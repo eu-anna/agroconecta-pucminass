@@ -1,0 +1,39 @@
+@model AgroConecta.Models.Relatorio
+
+@{
+    ViewData["Title"] = "Excluir Relatório";
+}
+
+<h1 class="page-title">Excluir Relatório</h1>
+
+<div class="agro-card form-card">
+
+    <p class="delete-warning">
+        Tem certeza que deseja excluir este relatório?
+    </p>
+
+    <div class="details-list">
+
+        <p>
+            <strong>Propriedade:</strong>
+            <span>@Model.Propriedade?.Nome</span>
+        </p>
+
+        <p>
+            <strong>Data:</strong>
+            <span>@Model.CriadoEm.ToString("dd/MM/yyyy")</span>
+        </p>
+
+    </div>
+
+    <form asp-action="Delete" method="post">
+
+        <input type="hidden" asp-for="Id" />
+
+        <button type="submit" class="agro-btn danger-btn">
+            Excluir
+        </button>
+
+    </form>
+
+</div>

@@ -1,0 +1,47 @@
+﻿@model AgroConecta.Models.AtividadeAgricola
+
+@{
+    ViewData["Title"] = "Cadastrar Atividade Agrícola";
+}
+
+<div class="form-page">
+    <h2>Cadastrar Atividade Agrícola</h2>
+
+    <form asp-action="Create" method="post" class="form-card">
+
+        <select asp-for="PropriedadeId" asp-items="ViewBag.Propriedades">
+            <option value="">Selecione a propriedade</option>
+        </select>
+
+        <select asp-for="CulturaId" asp-items="ViewBag.Culturas">
+            <option value="">Selecione a cultura</option>
+        </select>
+
+        <input asp-for="DataInicio" type="date" />
+
+        <input asp-for="DataFim" type="date" />
+
+        <select asp-for="Tipo">
+            <option value="">Selecione o tipo</option>
+            <option value="Plantio">Plantio</option>
+            <option value="Colheita">Colheita</option>
+            <option value="Fertilização">Fertilização</option>
+            <option value="Irrigação">Irrigação</option>
+            <option value="Manutenção">Manutenção</option>
+        </select>
+
+        <select asp-for="Status">
+            <option value="">Selecione o status</option>
+            <option value="Pendente">Pendente</option>
+            <option value="Em Andamento">Em Andamento</option>
+            <option value="Concluído">Concluído</option>
+        </select>
+
+        <textarea asp-for="Descricao" placeholder="Descrição"></textarea>
+
+        <div class="form-actions">
+            <button type="submit">Salvar</button>
+            <a href="/AtividadesAgricolas">Voltar</a>
+        </div>
+    </form>
+</div>
