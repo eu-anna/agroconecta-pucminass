@@ -1,172 +1,102 @@
-# 🌱 AgroConecta
+# AgroConecta
 
-## Tecnologia e Mercado para o Pequeno Produtor
+Plataforma web acadêmica para apoiar pequenos produtores rurais no gerenciamento da produção, no acompanhamento de informações agrícolas e na comercialização de produtos.
 
-> Projeto acadêmico desenvolvido em equipe no curso de Análise e Desenvolvimento de Sistemas da PUC Minas — 2026/1.
+> Projeto desenvolvido em equipe na graduação de Análise e Desenvolvimento de Sistemas da PUC Minas, no período 2026/1. Este repositório é um fork do projeto acadêmico original.
 
----
+## Sobre o projeto
 
-## 📌 Sobre o projeto
+O AgroConecta reúne ferramentas para organizar informações da propriedade e aproximar produtores e consumidores. A aplicação foi construída como projeto acadêmico e contém módulos de gestão agrícola, marketplace e interação entre usuários.
 
-A agricultura familiar possui papel importante na produção de alimentos, na economia local e na segurança alimentar. Entretanto, pequenos produtores enfrentam desafios relacionados à imprevisibilidade climática, ao uso de recursos naturais, à integração de informações e ao acesso a tecnologias que apoiem a tomada de decisões.
+## Funcionalidades implementadas
 
-O **AgroConecta** é uma plataforma web desenvolvida com o objetivo de centralizar informações relacionadas à atividade agrícola, apoiar a tomada de decisões e facilitar o acesso a recursos digitais.
+- Cadastro e gerenciamento de propriedades rurais, culturas e atividades agrícolas.
+- Consulta de condições climáticas atuais por localização, usando a API Open-Meteo.
+- Envio de imagem de uma cultura e geração de análise textual por meio da API da OpenAI.
+- Cadastro e organização de produtos agrícolas por categorias.
+- Carrinho, pedidos, acompanhamento de vendas e integração de checkout com Mercado Pago.
+- Fórum com categorias, tópicos, comentários e curtidas.
+- Relatórios agrícolas e exportação em PDF.
+- Painel com indicadores do sistema.
 
-A solução busca aproximar tecnologia e conhecimento do contexto agrícola, contribuindo para uma gestão mais organizada e para práticas agrícolas mais eficientes e sustentáveis.
+A análise por IA é experimental e pode produzir resultados incorretos. As informações geradas não substituem avaliação de um profissional agrícola.
 
----
+## Tecnologias
 
-## 🎯 Objetivo
+- **Back-end:** C#, ASP.NET Core MVC e .NET 10
+- **Persistência:** Entity Framework Core e SQL Server
+- **Interface:** Razor Views, HTML, CSS, JavaScript e Bootstrap
+- **Serviços externos:** Open-Meteo, OpenAI API e Mercado Pago
+- **Relatórios:** QuestPDF
+- **Versionamento:** Git e GitHub
 
-Desenvolver uma aplicação web integrada e acessível para apoiar pequenos produtores em atividades relacionadas à gestão agrícola, acompanhamento de informações, análise de culturas e comercialização de produtos.
+## Minha contribuição
 
----
+De acordo com a documentação do projeto, Anna Clara dos Santos contribuiu principalmente com:
 
-## 💻 Tecnologias
+- Cadastro, edição e acompanhamento de atividades agrícolas.
+- Cadastro e gerenciamento de culturas e associação com propriedades.
+- Interface de envio de imagens e exibição das análises de cultura.
+- Integração da análise de imagens com a API da OpenAI para gerar diagnóstico e recomendações textuais.
 
-### Desenvolvimento
-- C#
-- .NET
-- JavaScript
-- HTML5
-- CSS3
-- Bootstrap
+O projeto foi feito em equipe; os demais módulos e decisões foram desenvolvidos em colaboração com as pessoas listadas em **Equipe**.
 
-### Banco de dados
-- SQL
-- Banco de dados relacional
+## Demonstração
 
-### Integrações
-- APIs
-- Integração com dados meteorológicos
+A demonstração online está temporariamente indisponível. Para conhecer o sistema, consulte a documentação e as capturas de tela vinculadas nela. O endereço antigo do Render foi retirado até que a equipe confirme uma publicação funcionando.
 
-### Ferramentas
-- Git
-- GitHub
-- Visual Studio
+## Executar localmente
 
----
+### Pré-requisitos
 
-## ⚙️ Principais funcionalidades
+- .NET 10 SDK
+- SQL Server ou SQL Server LocalDB
+- Chave da API OpenAI para usar a análise de imagens
+- Credencial de teste do Mercado Pago para testar o checkout (opcional)
 
-O AgroConecta possui funcionalidades voltadas ao gerenciamento e acompanhamento das atividades agrícolas, incluindo:
+### Configuração
 
-- 🌱 Cadastro e gerenciamento de culturas;
-- 🚜 Cadastro e acompanhamento de atividades agrícolas;
-- 🌦️ Consulta de condições climáticas;
-- 🤖 Análise de culturas;
-- 🛒 Marketplace para comercialização de produtos;
-- 📷 Cadastro de produtos com envio de imagens;
-- 💳 Integração com serviço de pagamento;
-- 👥 Diferentes perfis de usuários;
-- 📊 Organização e apresentação de informações agrícolas.
+Configure as credenciais fora do código, usando variáveis de ambiente. No PowerShell, por exemplo:
 
----
+```powershell
+$env:ConnectionStrings__DefaultConnection = "Server=(localdb)\MSSQLLocalDB;Database=AgroConecta;Trusted_Connection=True;TrustServerCertificate=True;"
+$env:OpenAI__ApiKey = "SUA_CHAVE_OPENAI"
+$env:MercadoPagoSettings__AccessToken = "SEU_TOKEN_DE_TESTE"
+```
 
-# 👩‍💻 Minha contribuição
+Não publique chaves, senhas ou strings de conexão com credenciais no GitHub. A API de clima Open-Meteo não requer chave.
 
-O projeto foi desenvolvido em equipe durante o curso de Análise e Desenvolvimento de Sistemas da PUC Minas.
+### Iniciar
 
-Minha atuação esteve concentrada no desenvolvimento de interfaces e funcionalidades da aplicação, além de atividades relacionadas à documentação, testes e usabilidade.
+Na pasta raiz do repositório, execute:
 
-### 🌦️ Tela de Clima
+```powershell
+dotnet restore src/AgroConecta/AgroConecta/AgroConecta.csproj
+dotnet run --project src/AgroConecta/AgroConecta/AgroConecta.csproj
+```
 
-- Desenvolvimento da interface da tela de clima.
-- Integração com API para obtenção de informações meteorológicas em tempo real.
-- Exibição de temperatura, umidade e informações de previsão.
-- Implementação da seleção de propriedade para consulta das informações climáticas.
+Abra no navegador a URL local indicada no terminal. Na inicialização, a aplicação tenta criar o banco e as tabelas usando a conexão configurada. A integração com OpenAI e o checkout dependem de credenciais válidas; sem elas, esses recursos externos não funcionarão.
 
-### 🚜 Atividades Agrícolas
+## Estrutura
 
-- Desenvolvimento da interface de acompanhamento das atividades agrícolas.
-- Exibição de informações como data, propriedade, tipo e status da atividade.
-- Implementação das interfaces relacionadas ao gerenciamento das atividades.
-- Desenvolvimento das ações de edição e exclusão.
+```text
+src/AgroConecta/AgroConecta/   Aplicação ASP.NET Core MVC
+  Controllers/                  Fluxos e ações da aplicação
+  Data/                         Contexto e inicialização do banco
+  Models/                       Entidades e modelos de tela
+  Services/                     Integrações externas
+  Views/                        Páginas Razor
+  wwwroot/                      CSS, JavaScript, imagens e uploads
 
-### 🤖 Análise da Cultura
+docs/                           Documentação acadêmica e testes
+presentation/                   Materiais da apresentação
+```
 
-- Desenvolvimento da interface para apresentação da análise da cultura.
-- Exibição da imagem analisada.
-- Organização visual do relatório e das informações apresentadas ao usuário.
+## Documentação
 
-### 🛒 Marketplace
+A pasta [`docs`](docs/) contém documentação de contexto, requisitos, metodologia, interface, arquitetura, programação das funcionalidades e registros de testes. O projeto original também pode ser consultado em [ICEI-PUC-Minas-PMV-ADS](https://github.com/ICEI-PUC-Minas-PMV-ADS/pmv-ads-2026-1-e2-proj-int-t3-agroconecta).
 
-- Desenvolvimento da interface de cadastro de produtos.
-- Implementação da interface para envio de imagens.
-- Criação dos campos de produto, descrição e valor.
-- Organização da experiência de cadastro do produto.
-
-### 📋 Documentação e testes
-
-Também participei de atividades relacionadas à documentação e qualidade do projeto, incluindo:
-
-- Documentação de requisitos e funcionalidades.
-- Atualização da documentação do projeto.
-- Plano de testes de software.
-- Registro de testes de software.
-- Plano de testes de usabilidade.
-- Registro de testes de usabilidade.
-- Análise e organização dos resultados dos testes.
-
----
-
-## 🖥️ Interface do sistema
-
-### Dashboard
-
-Interface principal da plataforma, com acesso às principais funcionalidades do sistema.
-
-### Atividades Agrícolas
-
-Tela destinada ao acompanhamento e gerenciamento das atividades realizadas nas propriedades.
-
-### Clima
-
-Tela destinada à consulta de informações meteorológicas, utilizando integração com API para obtenção de dados em tempo real.
-
-### Análise da Cultura
-
-Interface destinada à apresentação dos resultados da análise de uma cultura agrícola.
-
-### Marketplace
-
-Tela destinada ao cadastro e comercialização de produtos.
-
----
-
-## 🚀 Demonstração
-
-A aplicação possui um ambiente de demonstração disponível em:
-
-**[Acessar AgroConecta](https://pmv-ads-2026-1-e2-proj-int-t3-agroconecta.onrender.com)**
-
-> O ambiente de demonstração pode apresentar períodos de indisponibilidade.
-
----
-
-## 📚 Documentação
-
-A documentação acadêmica do projeto está disponível na pasta [`docs`](docs/).
-
-Entre os documentos estão:
-
-- Documentação de Contexto
-- Especificação do Projeto
-- Metodologia
-- Projeto de Interface
-- Arquitetura da Solução
-- Template Padrão da Aplicação
-- Programação de Funcionalidades
-- Plano de Testes de Software
-- Registro de Testes de Software
-- Plano de Testes de Usabilidade
-- Registro de Testes de Usabilidade
-- Apresentação do Projeto
-- Referências
-
----
-
-## 👥 Equipe
+## Equipe
 
 - Anna Clara dos Santos
 - Elizabeth França Vaz dos Santos
@@ -175,32 +105,10 @@ Entre os documentos estão:
 - Rafaela Parolini Fragnan
 - Rodrigo Felix Gomes
 
-### Orientador
+**Orientador:** Claudio Faria  
+**Curso:** Análise e Desenvolvimento de Sistemas — PUC Minas  
+**Período:** 2026/1
 
-**Claudio Faria**
+## Observação
 
----
-
-## 🏫 Contexto acadêmico
-
-**Curso:** Análise e Desenvolvimento de Sistemas  
-**Instituição:** PUC Minas  
-**Período:** 2026/1  
-**Projeto:** Desenvolvimento de uma Aplicação Interativa
-
----
-
-## 🔗 Repositório original
-
-Este repositório é um fork do projeto acadêmico desenvolvido na organização da PUC Minas.
-
-**Repositório original:**  
-https://github.com/ICEI-PUC-Minas-PMV-ADS/pmv-ads-2026-1-e2-proj-int-t3-agroconecta
-
----
-
-## 📄 Observação
-
-Este projeto foi desenvolvido para fins acadêmicos como parte das atividades do curso de Análise e Desenvolvimento de Sistemas da PUC Minas.
-
-O desenvolvimento foi realizado de forma colaborativa entre os integrantes da equipe.
+Este é um protótipo acadêmico. Antes de qualquer uso público com dados reais, é necessário revisar a segurança da aplicação, a configuração de credenciais e os fluxos de autenticação e pagamento.
