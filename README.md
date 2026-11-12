@@ -32,7 +32,7 @@ A análise por IA é experimental e pode produzir resultados incorretos. As info
 
 ## Minha contribuição
 
-De acordo com a documentação do projeto, Anna Clara dos Santos contribuiu principalmente com:
+Minhas contribuições principal foi:
 
 - Cadastro, edição e acompanhamento de atividades agrícolas.
 - Cadastro e gerenciamento de culturas e associação com propriedades.
@@ -43,7 +43,7 @@ O projeto foi feito em equipe; os demais módulos e decisões foram desenvolvido
 
 ## Demonstração
 
-A demonstração online está temporariamente indisponível. Para conhecer o sistema, consulte a documentação e as capturas de tela vinculadas nela. O endereço antigo do Render foi retirado até que a equipe confirme uma publicação funcionando.
+A demonstração online está temporariamente indisponível. Para conhecer o sistema, consulte a documentação e as capturas de tela vinculadas nela. 
 
 ## Executar localmente
 
@@ -64,7 +64,7 @@ $env:OpenAI__ApiKey = "SUA_CHAVE_OPENAI"
 $env:MercadoPagoSettings__AccessToken = "SEU_TOKEN_DE_TESTE"
 ```
 
-Não publique chaves, senhas ou strings de conexão com credenciais no GitHub. A API de clima Open-Meteo não requer chave.
+A API de clima Open-Meteo não requer chave.
 
 ### Iniciar
 
